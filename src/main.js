@@ -234,13 +234,11 @@ let touchEndX = 0
 let touchEndY = 0
 
 document.addEventListener('touchstart', event => {
-  event.preventDefault();
   touchStartX = event.changedTouches[0].screenX
   touchStartY = event.changedTouches[0].screenY
 })
 
 document.addEventListener('touchend', event => {
-  event.preventDefault();
   touchEndX = event.changedTouches[0].screenX
   touchEndY = event.changedTouches[0].screenY
   handleGesture()
