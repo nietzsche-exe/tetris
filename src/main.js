@@ -227,5 +227,67 @@ $section.addEventListener('click', () => {
   audio.play()
 })
 
+//movile movement
+let touchStartX = 0
+let touchStartY = 0
+let touchEndX = 0
+let touchEndY = 0
+
+document.addEventListener('touchstart', event => {
+  touchStartX = event.changedTouches[0].screenX
+  touchStartY = event.changedTouches[0].screenY
+})
+
+document.addEventListener('touchend', event => {
+  touchEndX = event.changedTouches[0].screenX
+  touchEndY = event.changedTouches[0].screenY
+  handleGesture()
+})
+
+function handleGesture() {
+  const deltaX = touchEndX - touchStartX
+  const deltaY = touchEndY - touchStartY
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    if (deltaX > 0) {
+      // Deslizar a la derecha
+      piece.position.x++
+      if (checkCollision()) {
+        piece.position.x--
+      }
+    } else {
+      // Deslizar a la izquierda
+      piece.position.x--
+      if (checkCollision()) {
+        piece.position.x++
+      }
+    }
+  } else {
+    if (deltaY > 0) {
+      // Deslizar hacia abajo
+      piece.position.y++
+      if (checkCollision()) {
+        piece.position.y--
+        solidifyPiece()
+        removeRows()
+      }
+    } else {
+      // Deslizar hacia arriba (rotar pieza)
+      const rotated = []
+      for (let i = 0; i < piece.shape[0].length; i++) {
+        const row = []
+        for (let j = piece.shape.length - 1; j >= 0; j--) {
+          row.push(piece.shape[j][i])
+        }
+        rotated.push(row)
+      }
+      const previousShape = piece.shape
+      piece.shape = rotated
+      if (checkCollision()) {
+        piece.shape = previousShape
+      }
+    }
+  }
+}
 
 
